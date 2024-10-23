@@ -21,7 +21,6 @@ public class IngredientCatalogue extends Catalogue {
 
     public IngredientCatalogue() {
         addDefaultProducts();
-        super.nextProductId += 6;
     }
 
     @Override
@@ -58,4 +57,14 @@ public class IngredientCatalogue extends Catalogue {
         }
         return ingredient;
     }
+
+    // Retrieves an ingredient by its ID
+    public Ingredient getIngredientById(int id) {
+        Product product = productCatalogue.get(id);
+        if (product instanceof Ingredient) {
+            return (Ingredient) product;
+        }
+        throw new NoSuchElementException("Ingredient with ID " + id + " not found.");
+    }
+
 }
