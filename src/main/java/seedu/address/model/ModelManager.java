@@ -11,10 +11,13 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
-import seedu.address.model.order.CustomerOrder;
-import seedu.address.model.order.OrderList;
-import seedu.address.model.order.SupplyOrder;
+import seedu.address.model.order.*;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.Supplier;
+import seedu.address.model.product.Ingredient;
+import seedu.address.model.product.IngredientCatalogue;
+import seedu.address.model.product.Pastry;
+import seedu.address.model.product.PastryCatalogue;
 import seedu.address.model.product.*;
 
 /**
@@ -28,7 +31,10 @@ public class ModelManager implements Model {
     private final FilteredList<Person> filteredPersons;
     private final PastryCatalogue pastryCatalogue = new PastryCatalogue();
     private final IngredientCatalogue ingredientCatalogue = new IngredientCatalogue();
-    private final OrderList orderList = new OrderList();
+    private final SupplierOrderList supplierOrderList;
+    private final CustomerOrderList customerOrderList;
+    private final ObservableList<SupplyOrder> supplyOrderObservableList;
+    private final ObservableList<CustomerOrder> customerOrderObservableList;
     private final Inventory inventory = new Inventory(ingredientCatalogue);
 
     /**
@@ -36,13 +42,16 @@ public class ModelManager implements Model {
      */
     public ModelManager(ReadOnlyAddressBook addressBook, ReadOnlyUserPrefs userPrefs) {
         requireAllNonNull(addressBook, userPrefs);
-
         logger.fine("Initializing with address book: " + addressBook
                 + " and user prefs " + userPrefs);
 
         this.addressBook = new AddressBook(addressBook);
         this.userPrefs = new UserPrefs(userPrefs);
         this.filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
+        this.supplierOrderList = this.addressBook.getSupplierOrderList();
+        this.customerOrderList = this.addressBook.getCustomerOrderList();
+        this.supplyOrderObservableList = this.supplierOrderList.getOrders();
+        this.customerOrderObservableList = this.customerOrderList.getOrders();
     }
 
     public ModelManager() {
@@ -135,17 +144,30 @@ public class ModelManager implements Model {
 
     @Override
     public void addCustomerOrder(CustomerOrder customerOrder) {
-        orderList.addCustomerOrder(customerOrder);
+        customerOrderList.addOrder(customerOrder);
     }
 
     @Override
     public void addSupplyOrder(SupplyOrder supplyOrder) {
-        orderList.addSupplyOrder(supplyOrder);
+        supplierOrderList.addOrder(supplyOrder);
     }
 
     @Override
-    public OrderList getOrderList() {
-        return orderList;
+    public CustomerOrderList getCustomerOrderList() {
+        return customerOrderList;
+    }
+
+    @Override
+    public SupplierOrderList getSupplierOrderList() {
+        return supplierOrderList;
+    }
+
+    public ObservableList<SupplyOrder> getSupplyOrderObservableList() {
+        return supplyOrderObservableList;
+    }
+
+    public ObservableList<CustomerOrder> getCustomerOrderObservableList() {
+        return customerOrderObservableList;
     }
 
     @Override
