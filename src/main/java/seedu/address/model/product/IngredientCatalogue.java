@@ -14,21 +14,9 @@ public class IngredientCatalogue extends Catalogue {
     private static IngredientCatalogue instance; // Singleton instance
     private final Map<String, Ingredient> ingredientByName = new HashMap<>();
 
-    /**
-     * Initializes the ingredient catalogue with provided ingredients.
-     * If no ingredients are provided, initializes with default ingredients.
-     */
-    // New constructor to initialize with a given Map of ingredients
-    public IngredientCatalogue(Map<Integer, Ingredient> ingredients) {
-        for (Ingredient ingredient : ingredients.values()) {
-            addIngredient(ingredient);
-        }
-    }
-
     // Existing no-arg constructor remains for default initialization
-    private IngredientCatalogue() {
-        this(SampleDataUtil.getDefaultIngredients());
-    }
+    private IngredientCatalogue() {}
+
     /**
      * Returns the singleton instance of IngredientCatalogue.
      *
@@ -57,7 +45,7 @@ public class IngredientCatalogue extends Catalogue {
      * @param ingredient The ingredient to add.
      */
     public void addIngredient(Ingredient ingredient) {
-        productCatalogue.put(ingredient.getProductId(), ingredient);
+        productCatalogue.put(nextProductId, ingredient);
         ingredientByName.put(ingredient.getName().toLowerCase(), ingredient);
         nextProductId++;
     }
