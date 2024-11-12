@@ -97,7 +97,7 @@ public class AddCustomerCommandTest {
         AddCustomerCommand command = new AddCustomerCommand(duplicateCustomer);
 
         // Verify that the command fails with the appropriate duplicate message
-        assertCommandFailure(command, model, AddCustomerCommand.MESSAGE_DUPLICATE_CUSTOMER);
+        assertCommandFailure(command, model, AddCustomerCommand.MESSAGE_DUPLICATE_PHONE);
     }
 
     @Test
